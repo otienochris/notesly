@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200975445268",
+    "project_id": "juicy-notes-app",
+    "storage_bucket": "juicy-notes-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200975445268:android:a637020f4555dd7b5f6601",
+        "android_client_info": {
+          "package_name": "com.expeditioncodes.notesly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCTd2SAn9PLsvVJroYNBNqAZhCoUECmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
