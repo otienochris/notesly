@@ -63,8 +63,8 @@ class _RegisterViewState extends State<RegisterView> {
                     .createUserWithEmailAndPassword(
                         email: email, password: password);
 
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    verifyEmailRoute, (route) => false);
+                await userCredentials?.user?.sendEmailVerification();
+                Navigator.of(context).pushNamed(verifyEmailRoute);
 
                 devtools.log(userCredentials.toString());
               } on FirebaseAuthException catch (e) {
