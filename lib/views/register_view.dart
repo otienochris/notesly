@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notesly/constants/routes.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -29,7 +30,9 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register'),),
+      appBar: AppBar(
+        title: const Text('Register'),
+      ),
       body: Column(
         children: [
           TextField(
@@ -57,7 +60,8 @@ class _RegisterViewState extends State<RegisterView> {
                     .createUserWithEmailAndPassword(
                         email: email, password: password);
 
-                Navigator.of(context).pushNamedAndRemoveUntil('/verifyEmail', (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    verifyEmailRoute, (route) => false);
 
                 print(userCredentials);
               } on FirebaseAuthException catch (e) {
@@ -78,9 +82,14 @@ class _RegisterViewState extends State<RegisterView> {
             },
             child: const Text('Register'),
           ),
-          TextButton(onPressed: (){
-            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-          }, child: const Text('Have an account? login'))
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  loginRoute,
+                  (route) => false,
+                );
+              },
+              child: const Text('Have an account? login'))
         ],
       ),
     );

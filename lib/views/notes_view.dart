@@ -2,6 +2,7 @@ import 'dart:developer' as devtools show log;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notesly/constants/routes.dart';
 
 enum MenuActionsEnum { logout }
 
@@ -34,7 +35,10 @@ class _NotesViewState extends State<NotesView> {
                   devtools.log(shouldLogout.toString());
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (route) => false,
+                    );
                   }
               }
             },
