@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -58,20 +60,25 @@ class _LoginViewState extends State<LoginView> {
                 final UserCredential userCredentials =
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: email, password: password);
-                if (userCredentials?.user!.emailVerified ?? false) {
+                log(userCredentials.toString());
+
+                if (userCredentials?.user?.emailVerified ?? false) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/notesPage', (route) => false);
+                } else {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/verifyEmail', (route) => false);
                 }
-                // print(userCredentials?.);
+                // log(userCredentials?.);
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'invalid-credential') {
-                  print('Invalid Credentials');
+                  log('Invalid Credentials');
                 } else if (e.code == 'user-not-found') {
-                  print('User Not Found');
+                  log('User Not Found');
                 } else {
-                  print('Authentication Error');
+                  log('Authentication Error');
                 }
-                print(e);
+                log(e.toString());
               }
             },
             child: const Text('Login'),
