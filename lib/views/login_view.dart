@@ -1,9 +1,11 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notesly/constants/routes.dart';
+import 'package:notesly/services/auth/auth_service.dart';
 
+import '../services/auth/auth_exceptions.dart';
+import '../services/auth/auth_user.dart';
 import '../utilities/helper_util.dart';
 
 class LoginView extends StatefulWidget {
@@ -64,12 +66,11 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text;
               final password = _password.text;
               try {
-                final UserCredential userCredentials =
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: email, password: password);
-                log(userCredentials.toString());
+                final AuthUser authUser = await AuthService.firebase()
+                    .logIn(email: email, password: password);
+                log(authUser.toString());
 
-                if (userCredentials?.user?.emailVerified ?? false) {
+                if (authUser.isEmailVerified ?? false) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     notesRoute,
                     (route) => false,
@@ -81,34 +82,13 @@ class _LoginViewState extends State<LoginView> {
                   );
                 }
                 // log(userCredentials?.);
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'invalid-credential') {
-                  log('Invalid Credentials');
-                  await showErrorDialog(
-                    context,
-                    'Invalid Credentials. Provide a valid email and password',
-                  );
-                } else if (e.code == 'user-not-found') {
-                  log('User Not Found');
-                  await showErrorDialog(
-                    context,
-                    'User not found',
-                  );
-                } else {
-                  await showErrorDialog(
-                    context,
-                    'Something wrong happened. Try again later',
-                  );
-                  log('Error: ${e.code}');
-                }
-                log(e.toString());
-              } catch (e) {
-                await showErrorDialog(
-                  context,
-                  'Something wrong happened. ${e.toString()}',
-                );
+              } on UserNotFoundAuthException catch (e) {
+                await showErrorDialog(context, 'User not found!');
+              } on InvalidCredentialsAuthException catch (e) {
+                await showErrorDialog(context, 'Invalid Credentials!');
+              } on GenericAuthException catch (e) {
+                await showErrorDialog(context, 'Authentication Error!');
               }
-              ;
             },
             child: const Text('Login'),
           ),
@@ -125,4 +105,3 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
-
