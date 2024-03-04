@@ -5,7 +5,7 @@ import 'package:notesly/constants/routes.dart';
 import 'package:notesly/services/auth/auth_service.dart';
 import 'package:notesly/utilities/helper_util.dart';
 
-import '../services/auth/auth_exceptions.dart';
+import '../../services/auth/auth_exceptions.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

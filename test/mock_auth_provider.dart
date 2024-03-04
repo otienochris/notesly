@@ -50,7 +50,7 @@ class MockAuthProvider implements AuthProviderI {
       throw InvalidCredentialsAuthException();
     }
 
-    const user = AuthUser(isEmailVerified: false);
+    const user = AuthUser(isEmailVerified: false, email: "abc@gmail.com");
     _currentUser = user;
 
     return Future.value(user);
@@ -69,7 +69,7 @@ class MockAuthProvider implements AuthProviderI {
   Future<void> sendEmailVerification() async {
     if (!isInitialized) throw NotInitializedException();
     if(_currentUser == null) throw UserNotFoundAuthException();
-    const newUser = AuthUser(isEmailVerified: true);
+    const newUser = AuthUser(isEmailVerified: true, email: "abc@gmai.com");
     _currentUser = newUser;
   }
 }

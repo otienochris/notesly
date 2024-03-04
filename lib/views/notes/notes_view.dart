@@ -5,7 +5,7 @@ import 'package:notesly/constants/routes.dart';
 import 'package:notesly/services/auth/auth_service.dart';
 import 'package:notesly/services/notes/notes_service.dart';
 
-import '../enums/menu_actions.dart';
+import '../../enums/menu_actions.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -43,6 +43,13 @@ class _NotesViewState extends State<NotesView> {
         ),
         backgroundColor: Colors.deepOrangeAccent,
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  newNoteRoute,
+                );
+              },
+              icon: const Icon(Icons.add, color: Colors.white,)),
           PopupMenuButton<MenuActionsEnum>(
             onSelected: (selected) async {
               devtools.log(selected.name);
@@ -58,6 +65,10 @@ class _NotesViewState extends State<NotesView> {
                       (route) => false,
                     );
                   }
+                case MenuActionsEnum.addNewNote:
+                  Navigator.of(context).pushNamed(
+                    newNoteRoute,
+                  );
               }
             },
             icon: const Icon(
@@ -69,6 +80,10 @@ class _NotesViewState extends State<NotesView> {
                 PopupMenuItem<MenuActionsEnum>(
                   value: MenuActionsEnum.logout,
                   child: Text('Log Out'),
+                ),
+                PopupMenuItem<MenuActionsEnum>(
+                  value: MenuActionsEnum.addNewNote,
+                  child: Text('Create note'),
                 )
               ];
             },
@@ -81,20 +96,25 @@ class _NotesViewState extends State<NotesView> {
           context,
           snapshot,
         ) {
-          switch(snapshot.connectionState) {
+          switch (snapshot.connectionState) {
             case ConnectionState.done:
-              return StreamBuilder(stream: _notesService.allNotes, builder: (context, snapshot,) {
-                switch(snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Text('waiting for all notes ...');
-                  default:
-                    return const CircularProgressIndicator();
-                }
-              },);
+              return StreamBuilder(
+                stream: _notesService.allNotes,
+                builder: (
+                  context,
+                  snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Text('waiting for all notes ...');
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                },
+              );
             default:
               return const CircularProgressIndicator();
           }
-
         },
       ),
     );
