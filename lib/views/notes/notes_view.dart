@@ -2,6 +2,7 @@ import 'dart:developer' as devtools show log;
 
 import 'package:flutter/material.dart';
 import 'package:notesly/constants/routes.dart';
+import 'package:notesly/model/entities/database_note.dart';
 import 'package:notesly/services/auth/auth_service.dart';
 import 'package:notesly/services/notes/notes_service.dart';
 
@@ -24,12 +25,6 @@ class _NotesViewState extends State<NotesView> {
     _notesService = NotesService();
     _notesService.open();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _notesService.close();
-    super.dispose();
   }
 
   @override
@@ -110,7 +105,28 @@ class _NotesViewState extends State<NotesView> {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text('waiting for all notes ...');
+                      if (snapshot.hasData) {
+                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        print(allNotes);
+                        return ListView.builder(
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                allNotes[index].text,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              leading: const Icon(Icons.notes),
+
+                            );
+                          },
+                          itemCount: allNotes.length,
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    // return const Text('waiting for all notes ...');
                     default:
                       return const CircularProgressIndicator();
                   }
