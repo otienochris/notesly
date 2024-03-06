@@ -6,7 +6,7 @@ import 'package:notesly/services/auth/auth_service.dart';
 
 import '../services/auth/auth_exceptions.dart';
 import '../services/auth/auth_user.dart';
-import '../utilities/helper_util.dart';
+import '../utilities/dialogs/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -83,11 +83,11 @@ class _LoginViewState extends State<LoginView> {
                 }
                 // log(userCredentials?.);
               } on UserNotFoundAuthException catch (e) {
-                await showErrorDialog(context, 'User not found!');
+                await showErrorDialog(context: context, text: 'User not found!');
               } on InvalidCredentialsAuthException catch (e) {
-                await showErrorDialog(context, 'Invalid Credentials!');
+                await showErrorDialog(context: context, text: 'Invalid Credentials!');
               } on GenericAuthException catch (e) {
-                await showErrorDialog(context, 'Authentication Error!');
+                await showErrorDialog(context: context, text: 'Authentication Error!');
               }
             },
             child: const Text('Login'),
