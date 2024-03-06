@@ -3,7 +3,7 @@ import 'package:notesly/constants/routes.dart';
 import 'package:notesly/services/auth/auth_service.dart';
 import 'package:notesly/services/auth/auth_user.dart';
 import 'package:notesly/views/login_view.dart';
-import 'package:notesly/views/notes/new_notes_view.dart';
+import 'package:notesly/views/notes/new_update_note_view.dart';
 import 'package:notesly/views/notes/notes_view.dart';
 import 'package:notesly/views/register/register_view.dart';
 import 'package:notesly/views/register/verify_email_view.dart';
@@ -23,7 +23,7 @@ void main() {
       registerRoute: (context) => const RegisterView(),
       verifyEmailRoute: (context) => const VerifyEmailView(),
       notesRoute: (context) => const NotesView(),
-      newNoteRoute: (context) => const NewNoteView(),
+      createUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
     },
   ));
 }
