@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart'
@@ -16,14 +17,15 @@ class NotesService {
   List<DatabaseNote> _notes = [];
 
   // singleton
-  NotesService._shareInstance(){
-    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
-      onListen: () {
-        _notesStreamController.sink.add(_notes);
-      }
-    );
+  NotesService._shareInstance() {
+    _notesStreamController =
+        StreamController<List<DatabaseNote>>.broadcast(onListen: () {
+      _notesStreamController.sink.add(_notes);
+    });
   }
+
   static final NotesService _shared = NotesService._shareInstance();
+
   factory NotesService() => _shared;
 
   late final StreamController<List<DatabaseNote>> _notesStreamController;
@@ -216,7 +218,14 @@ class NotesService {
     if (notes.isEmpty) {
       throw CouldNotFindNotesException();
     } else {
-      return notes.map((note) => DatabaseNote.fromRow(note));
+      log('Found ${notes.length} notes');
+
+      return notes.map((note) {
+        log(note.toString());
+        var databaseNote = DatabaseNote.fromRow(note);
+        log(databaseNote.text);
+        return databaseNote;
+      });
     }
   }
 
@@ -226,8 +235,12 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     await getNoteById(id: note.id);
-    final updatesCount =
-        await db.update(notesTable, {textColumn: text, isUploadedColumn: 0});
+    final updatesCount = await db.update(
+      notesTable,
+      {textColumn: text, isUploadedColumn: 0},
+      where: 'id = ?',
+      whereArgs: [note.id],
+    );
 
     if (updatesCount == 0) {
       throw CouldNotUpdateNotesException();
@@ -253,7 +266,7 @@ class NotesService {
 
   Future<void> _ensureDbIsOpen() async {
     try {
-     await open();
+      await open();
     } on DatabaseAlreadyOpenedException {
       // empty
     }
